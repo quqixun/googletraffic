@@ -14,6 +14,7 @@
 # @param webshot_zoom How many pixels should be created relative to height and width values. If `height` and `width` are set to `100` and `webshot_zoom` is set to `2`, the resulting raster will have dimensions of about `200x200` (default: `1`). 
 # @param webshot_delay How long to wait for .html file to load. Larger .html files (large height/widths) will require more time to fully load. If `NULL`, the following delay time (in seconds) is used: `delay = max(height,width)/200`.
 # @param print_progress Whether to print function progress
+# @param delete_cache Whether to delete the temporary data. (default: `TRUE`)
 #
 # @return Returns a georeferenced raster. Raster pixels can contain the following values: 1 = no traffic; 2 = medium traffic; 3 = high traffic; 4 = heavy traffic.
 # @references Sharma, G., Wu, W., & Dalal, E. N. (2005). The CIEDE2000 color-difference formula: Implementation notes, supplementary test data, and mathematical observations. Color Research & Application: Endorsed by Inter-Society Color Council, The Colour Group (Great Britain), Canadian Society for Color, Color Science Association of Japan, Dutch Society for the Study of Color, The Swedish Colour Centre Foundation, Colour Society of Australia, Centre Français de la Couleur, 30(1), 21-30.
@@ -26,7 +27,8 @@ gt_html_to_raster <- function(filename,
                               traffic_color_dist_metric = "CIEDE2000",
                               webshot_zoom = 1,
                               webshot_delay = NULL,
-                              print_progress = TRUE){
+                              print_progress = TRUE,
+                              delete_cache = TRUE){
   
   #### Set webshot_delay if null
   webshot_delay <- gt_estimate_webshot_delay(height, width, webshot_delay)
@@ -50,7 +52,7 @@ gt_html_to_raster <- function(filename,
   # Gives a warning referencing lengths/logical that can be ignored
   # In is.null(x) || is.na(x) : 'length(x) = 4 > 1' in coercion to 'logical(1)'
   
-  dir.create(filename_dir)
+  dir.create(filename_dir, showWarnings = FALSE)
   file.create(file.path(filename_dir, paste0(filename_only,".png")) %>% str_replace_all("\\\\", "/"))
   
   suppressWarnings({
@@ -75,7 +77,9 @@ gt_html_to_raster <- function(filename,
                                      traffic_color_dist_metric = traffic_color_dist_metric)
   
   ## Delete png from temp file
-  unlink(file.path(filename_dir, paste0(filename_only,".png")) %>% str_replace_all("\\\\", "/"))
-  
+  if (delete_cache) {
+    unlink(file.path(filename_dir, paste0(filename_only,".png")) %>% str_replace_all("\\\\", "/"))
+  }
+
   return(r)
 }
