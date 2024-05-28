@@ -72,10 +72,6 @@ gt_make_raster <- function(location,
       str_replace_all("\\\\", "/")
   }
 
-  # temp_dir <- tempdir() %>% str_replace_all("\\\\", "/")
-  # filename_html <- tempfile(pattern = "file", tmpdir = temp_dir, fileext = ".html") %>%
-  #   str_replace_all("\\\\", "/")
-
   ## Make html
   gt_make_html(location = location,
                height = height,
@@ -94,7 +90,8 @@ gt_make_raster <- function(location,
                          traffic_color_dist_metric = traffic_color_dist_metric,
                          webshot_zoom = webshot_zoom,
                          webshot_delay = webshot_delay,
-                         print_progress = print_progress)
+                         print_progress = print_progress,
+                         delete_cache = delete_cache)
   
   ## Delete html file
   if (delete_cache) {
