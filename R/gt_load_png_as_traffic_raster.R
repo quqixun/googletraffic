@@ -58,7 +58,7 @@ gt_load_png_as_traffic_raster <- function(filename,
     
     #### Assign traffic colors 
     ## Image to hex
-    rimg <- raster::as.raster(img) 
+    rimg <- raster::as.raster(img)
 
     google_colours = c("#63D668", "#FF974D", "#F23C32", "#811F1F")
     #google_colours = c("#11D68F", "#FFCF43", "#F24E42", "#A92727")
@@ -79,7 +79,7 @@ gt_load_png_as_traffic_raster <- function(filename,
         unique() %>% 
         as.data.frame() %>%
         dplyr::rename(hex = ".") %>%
-        dplyr::mutate(hex_noff = str_replace_all(.data$hex, "FF$", ""))
+        dplyr::mutate(hex_noff = str_replace_all(.data$hex, "FF$", "FF"))
       
       lab_df <- color_df$hex_noff %>% 
         schemr::hex_to_lab()
